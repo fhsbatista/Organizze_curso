@@ -12,6 +12,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.mindfree.fbatista.organizze.Config.ConfiguracaoFirebase;
 import com.mindfree.fbatista.organizze.Model.Usuario;
 import com.mindfree.fbatista.organizze.R;
@@ -61,9 +63,22 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
-                    Toast.makeText(LoginActivity.this, "Login deu certo!", Toast.LENGTH_SHORT).show();
+                    finish();
                 } else{
-                    Toast.makeText(LoginActivity.this, "Algo deu errado", Toast.LENGTH_SHORT).show();
+
+                    String excecao = "";
+
+                    try{
+                        throw task.getException();
+                    }catch (FirebaseAuthInvalidUserException e){
+                        excecao = "E-mail informado e invalido";
+                    }catch (FirebaseAuthInvalidCredentialsException e){
+                        excecao = "Senha invalida";
+                    }catch (Exception e){
+                        excecao = e.getMessage();
+                        e.printStackTrace();
+                    }
+                    Toast.makeText(LoginActivity.this, excecao, Toast.LENGTH_SHORT).show();
                 }
             }
         });
