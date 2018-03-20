@@ -1,4 +1,4 @@
-package com.mindfree.fbatista.organizze.Config;
+package com.mindfree.fbatista.organizze.config;
 
 import com.google.firebase.auth.FirebaseAuth;
 

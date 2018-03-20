@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     style="@style/Theme.AppCompat.Light.DarkActionBar"
-    tools:context="com.mindfree.fbatista.organizze.Activity.LoginActivity">
+    tools:context="com.mindfree.fbatista.organizze.activity.LoginActivity">
 
     <TextView
         android:id="@+id/textView8"

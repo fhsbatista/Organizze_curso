@@ -1,17 +1,13 @@
-package com.mindfree.fbatista.organizze.Activity;
+package com.mindfree.fbatista.organizze.activity;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.heinrichreimersoftware.materialintro.app.IntroActivity;
 import com.heinrichreimersoftware.materialintro.slide.FragmentSlide;
-import com.heinrichreimersoftware.materialintro.slide.SimpleSlide;
-import com.mindfree.fbatista.organizze.Activity.CadastroActivity;
-import com.mindfree.fbatista.organizze.Activity.LoginActivity;
-import com.mindfree.fbatista.organizze.Config.ConfiguracaoFirebase;
+import com.mindfree.fbatista.organizze.config.ConfiguracaoFirebase;
 import com.mindfree.fbatista.organizze.R;
 
 public class MainActivity extends IntroActivity {

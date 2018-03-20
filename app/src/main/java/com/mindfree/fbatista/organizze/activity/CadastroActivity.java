@@ -1,4 +1,4 @@
-package com.mindfree.fbatista.organizze.Activity;
+package com.mindfree.fbatista.organizze.activity;
 
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -15,8 +15,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
-import com.mindfree.fbatista.organizze.Config.ConfiguracaoFirebase;
-import com.mindfree.fbatista.organizze.Model.Usuario;
+import com.mindfree.fbatista.organizze.config.ConfiguracaoFirebase;
+import com.mindfree.fbatista.organizze.model.Usuario;
 import com.mindfree.fbatista.organizze.R;
 
 public class CadastroActivity extends AppCompatActivity {

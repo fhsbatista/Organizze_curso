@@ -1,4 +1,4 @@
-package com.mindfree.fbatista.organizze.Model;
+package com.mindfree.fbatista.organizze.model;
 
 /**
  * Created by fbatista on 18/03/18.

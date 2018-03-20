@@ -1,16 +1,14 @@
-package com.mindfree.fbatista.organizze.Activity;
+package com.mindfree.fbatista.organizze.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.mindfree.fbatista.organizze.Config.ConfiguracaoFirebase;
+import com.mindfree.fbatista.organizze.config.ConfiguracaoFirebase;
 import com.mindfree.fbatista.organizze.R;
 
 public class PrincipalActivity extends AppCompatActivity {
@@ -42,18 +40,18 @@ public class PrincipalActivity extends AppCompatActivity {
                 auth = ConfiguracaoFirebase.getAuth();
                 if (auth.getCurrentUser() != null) {
                     auth.signOut();
-                    startActivity(new Intent(PrincipalActivity.this, MainActivity.class));
+                    finish();
                 }
             }
         });
     }
 
     public void adicionarDespesa(View view){
-
+        startActivity(new Intent(PrincipalActivity.this, NovaDespesactivity.class));
     }
 
     public void adicionarReceita(View view){
-
+        startActivity(new Intent(PrincipalActivity.this, NovaReceitaActivity.class));
     }
 
 }
