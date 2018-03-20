@@ -16,6 +16,7 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.mindfree.fbatista.organizze.config.ConfiguracaoFirebase;
+import com.mindfree.fbatista.organizze.helper.Base64Custom;
 import com.mindfree.fbatista.organizze.model.Usuario;
 import com.mindfree.fbatista.organizze.R;
 
@@ -54,6 +55,7 @@ public class CadastroActivity extends AppCompatActivity {
                     mSenha.requestFocus();
                 } else{
                     Usuario usuario = new Usuario();
+                    usuario.setNome(nome);
                     usuario.setEmail(email);
                     usuario.setSenha(senha);
                     cadastrarUsuario(usuario);
@@ -65,7 +67,7 @@ public class CadastroActivity extends AppCompatActivity {
 
     }
 
-    public void cadastrarUsuario(Usuario usuario){
+    public void cadastrarUsuario(final Usuario usuario){
 
         auth = ConfiguracaoFirebase.getAuth();
         auth.createUserWithEmailAndPassword(
@@ -74,6 +76,9 @@ public class CadastroActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
+                    String idUsuario = Base64Custom.codificarBase64(usuario.getEmail());
+                    usuario.setIdUsuario(idUsuario);
+                    usuario.salvar();
                     finish();
                 } else{
 
