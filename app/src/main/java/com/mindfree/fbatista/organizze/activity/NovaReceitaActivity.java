@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.EditText;
 
 import com.mindfree.fbatista.organizze.R;
+import com.mindfree.fbatista.organizze.helper.DateCustom;
 
 public class NovaReceitaActivity extends AppCompatActivity {
 
@@ -25,6 +26,8 @@ public class NovaReceitaActivity extends AppCompatActivity {
         this.mCategoria = (TextInputEditText) findViewById(R.id.et_categoria);
         this.mData = (TextInputEditText) findViewById(R.id.et_data);
         this.mValor = (EditText) findViewById(R.id.et_valor);
+
+        mData.setText(DateCustom.dataAtual());
 
     }
 }

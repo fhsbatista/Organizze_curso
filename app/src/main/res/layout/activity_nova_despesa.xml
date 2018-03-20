@@ -105,6 +105,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:srcCompat="@drawable/ic_check_black_24dp" />
+            app:srcCompat="@drawable/ic_check_black_24dp"
+            android:onClick="salvarDespesa"/>
     </android.support.constraint.ConstraintLayout>
 </android.support.constraint.ConstraintLayout>
