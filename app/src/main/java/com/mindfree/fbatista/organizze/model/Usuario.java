@@ -22,6 +22,9 @@ public class Usuario {
 
     public void salvar(){
 
+        this.totalDespesa = 0.00;
+        this.totalReceita = 0.00;
+
         DatabaseReference firebase = ConfiguracaoFirebase.getFirebaseDatabase();
         firebase.child("usuarios")
                 .child(this.idUsuario)
@@ -37,7 +40,21 @@ public class Usuario {
         return nome;
     }
 
+    public Double getTotalDespesa() {
+        return totalDespesa;
+    }
 
+    public void setTotalDespesa(Double totalDespesa) {
+        this.totalDespesa = totalDespesa;
+    }
+
+    public Double getTotalReceita() {
+        return totalReceita;
+    }
+
+    public void setTotalReceita(Double totalReceita) {
+        this.totalReceita = totalReceita;
+    }
 
     public void setIdUsuario(String idUsuario) {
         this.idUsuario = idUsuario;
