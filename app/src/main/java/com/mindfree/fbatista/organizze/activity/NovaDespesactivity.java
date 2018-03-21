@@ -1,10 +1,8 @@
 package com.mindfree.fbatista.organizze.activity;
 
 import android.os.Bundle;
-import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputEditText;
-import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -53,7 +51,7 @@ public class NovaDespesactivity extends AppCompatActivity {
 
     public void salvarDespesa(View view){
 
-        if(validarDespesa()){
+        if(validarDados()){
 
             Double despesaPreenchida = Double.parseDouble(mValor.getText().toString());
             movimentacao = new Movimentacao();
@@ -64,7 +62,6 @@ public class NovaDespesactivity extends AppCompatActivity {
             movimentacao.setTipo("d");
             movimentacao.salvar();
 
-            Log.i("teste", "Pedindo dado");
             Double despesaAtualizada = despesaPreenchida + despesaAtual;
             atualizarDespesaAtual(despesaAtualizada);
         }
@@ -72,7 +69,7 @@ public class NovaDespesactivity extends AppCompatActivity {
 
     }
 
-    public Boolean validarDespesa(){
+    public Boolean validarDados(){
 
         if(mValor.getText().toString().isEmpty()){
             Toast.makeText(this, "Digite um valor", Toast.LENGTH_SHORT).show();
@@ -94,22 +91,17 @@ public class NovaDespesactivity extends AppCompatActivity {
 
 
     public void recuperaDespesaAtual(){
-    //Este metodo e responsavel por recuperar com o saldo do usuario
+    //Este metodo e responsavel por recuperar o total de despesas to usuario
         String emailUsuario = auth.getCurrentUser().getEmail();
         String idUsuario = Base64Custom.codificarBase64(emailUsuario);
         DatabaseReference usuarioRef = firebaseRef.child("usuarios").child(idUsuario);
-        Log.i("teste", "Acessando firebase");
 
         usuarioRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Usuario usuario = dataSnapshot.getValue(Usuario.class);
-                Log.i("teste", "firebaseacessado");
-                if (usuario.getTotalDespesa() == null) {
-                    despesaAtual = 0.00;
-                } else{
-                    despesaAtual = usuario.getTotalDespesa();
-                }
+                despesaAtual = usuario.getTotalDespesa();
+
             }
 
             @Override
