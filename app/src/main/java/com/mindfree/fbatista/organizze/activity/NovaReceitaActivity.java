@@ -61,6 +61,7 @@ public class NovaReceitaActivity extends AppCompatActivity {
 
             Double receitaAtualizada = receitaPreenchida + receitaAtual;
             atualizarReceitaAtual(receitaAtualizada);
+            finish();
         }
 
     }

@@ -64,6 +64,7 @@ public class NovaDespesactivity extends AppCompatActivity {
 
             Double despesaAtualizada = despesaPreenchida + despesaAtual;
             atualizarDespesaAtual(despesaAtualizada);
+            finish();
         }
 
 
