@@ -35,5 +35,6 @@ dependencies {
     compile 'com.google.firebase:firebase-auth:11.8.0'
     compile 'com.heinrichreimersoftware:material-intro:1.6.2'
     compile 'com.github.clans:fab:1.6.4'
+    compile 'com.prolificinteractive:material-calendarview:1.4.3'
 }
 apply plugin: 'com.google.gms.google-services'

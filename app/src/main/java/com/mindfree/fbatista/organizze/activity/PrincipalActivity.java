@@ -4,46 +4,49 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.mindfree.fbatista.organizze.config.ConfiguracaoFirebase;
 import com.mindfree.fbatista.organizze.R;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+
+import org.w3c.dom.Text;
 
 public class PrincipalActivity extends AppCompatActivity {
 
     private Button sair;
     private FirebaseAuth auth;
+    private MaterialCalendarView calendarView;
+    private TextView mNome;
+    private TextView mValor;
+    private TextView mSaldo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_principal);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("Organizze");
         setSupportActionBar(toolbar);
 
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
+        calendarView = findViewById(R.id.calendarView);
+        mNome = findViewById(R.id.tv_nome);
+        mValor = findViewById(R.id.tv_valor);
+        mSaldo = findViewById(R.id.tv_saldo);
 
-        sair = findViewById(R.id.botao);
+        configurarCalendario();
 
-        sair.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                auth = ConfiguracaoFirebase.getAuth();
-                if (auth.getCurrentUser() != null) {
-                    auth.signOut();
-                    finish();
-                }
-            }
-        });
+
+
+
+
+
+
     }
 
     public void adicionarDespesa(View view){
@@ -54,4 +57,34 @@ public class PrincipalActivity extends AppCompatActivity {
         startActivity(new Intent(PrincipalActivity.this, NovaReceitaActivity.class));
     }
 
+    public void configurarCalendario(){
+        //Este metodo faz com que o calendario exiba os meses e os dias em portugues
+        CharSequence[] meses = {"Janeiro", "Fevereiro", "Março", "Abril", "Maio",
+                "Junho", "Julho", "Agosto","Setembro", "Outubro", "Novembro", "Dezembro"};
+
+
+        calendarView.setTitleMonths(meses);
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.principal, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()){
+
+            case R.id.principal_sair:
+                auth = ConfiguracaoFirebase.getAuth();
+                auth.signOut();
+                startActivity(new Intent(this, MainActivity.class));
+                finish();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }
