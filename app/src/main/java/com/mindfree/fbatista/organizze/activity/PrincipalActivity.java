@@ -224,6 +224,7 @@ public class PrincipalActivity extends AppCompatActivity {
                 int position = viewHolder.getAdapterPosition();
                 Movimentacao movimentacao = movimentos.get(position);
                 movimentoRef.child(movimentacao.getKey()).removeValue();
+                atualizarSaldo(movimentacao);
                 movimentoAdapter.notifyItemRemoved(position);
 
             }
@@ -239,6 +240,25 @@ public class PrincipalActivity extends AppCompatActivity {
 
         AlertDialog alert = builder.create();
         alert.show();
+    }
+
+    public void atualizarSaldo(Movimentacao movimentacao){
+
+        String emailUsuario = auth.getCurrentUser().getEmail();
+        String idUsuario = Base64Custom.codificarBase64(emailUsuario);
+
+        usuarioRef = firebaseRef.child("usuarios")
+                .child(idUsuario);
+
+
+        if(movimentacao.getTipo().equals("r")){
+            receitaTotal = receitaTotal - movimentacao.getValor();
+            usuarioRef.child("totalReceita").setValue(receitaTotal);
+
+        }else{
+            despesaTotal = despesaTotal - movimentacao.getValor();
+            usuarioRef.child("totalDespesa").setValue(despesaTotal);
+        }
     }
 
 
