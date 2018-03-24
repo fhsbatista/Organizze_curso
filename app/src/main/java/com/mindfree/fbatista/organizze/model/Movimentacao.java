@@ -11,6 +11,7 @@ import com.mindfree.fbatista.organizze.helper.DateCustom;
 
 public class Movimentacao {
 
+    private String key;
     private String data;
     private String categoria;
     private String descricao;
@@ -18,6 +19,14 @@ public class Movimentacao {
     private Double valor;
 
     public Movimentacao() {
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
 
     public String getData() {

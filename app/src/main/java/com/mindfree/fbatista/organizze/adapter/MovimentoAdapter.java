@@ -46,11 +46,11 @@ public class MovimentoAdapter extends RecyclerView.Adapter<MovimentoAdapter.MyVi
         holder.mCategoria.setText(movimentacao.getCategoria());
 
         if(movimentacao.getTipo().equals("d")){
-            holder.mValor.setTextColor(context.getResources().getColor(android.R.color.holo_red_light));
-            holder.mValor.setText("- " + movimentacao.getValor().toString());
+            holder.mValor.setTextColor(context.getResources().getColor(R.color.colorAccent));
+            holder.mValor.setText("- R$" + movimentacao.getValor().toString());
         } else{
-            holder.mValor.setTextColor(context.getResources().getColor(android.R.color.holo_green_light));
-            holder.mValor.setText(movimentacao.getValor().toString());
+            holder.mValor.setTextColor(context.getResources().getColor(R.color.colorPrimaryDarkReceita));
+            holder.mValor.setText("  R$" + movimentacao.getValor().toString());
 
         }
 

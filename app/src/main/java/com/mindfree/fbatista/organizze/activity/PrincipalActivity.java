@@ -1,18 +1,22 @@
 package com.mindfree.fbatista.organizze.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -80,6 +84,7 @@ public class PrincipalActivity extends AppCompatActivity {
         recyclerView.setAdapter(movimentoAdapter);
 
         configurarCalendario();
+        swipe();
 
 
 
@@ -178,19 +183,20 @@ public class PrincipalActivity extends AppCompatActivity {
                                   .child(idUsuario)
                                   .child(mesAnoSelecionado);
 
-        //Limpando os dados ja existentes na lista de movimentacoes caso tenha
-        movimentos.clear();
-        movimentoAdapter.notifyDataSetChanged();
+
 
         //Recuperando as movimentacoes
         valueEventListenerMovimento = movimentoRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                movimentos.clear();
+
                 for (DataSnapshot item : dataSnapshot.getChildren()){
                     Movimentacao movimentacao = item.getValue(Movimentacao.class);
+                    movimentacao.setKey(item.getKey());
                     movimentos.add(movimentacao);
-                    movimentoAdapter.notifyDataSetChanged();
                 }
+                movimentoAdapter.notifyDataSetChanged();
 
 
             }
@@ -202,6 +208,37 @@ public class PrincipalActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    public void excluirMovimento(final RecyclerView.ViewHolder viewHolder){
+
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Exclusao de movimento");
+        builder.setMessage("Voce tem certeza de que deseja excluir esta movimentacao?");
+        builder.setCancelable(false);
+
+        builder.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                int position = viewHolder.getAdapterPosition();
+                Movimentacao movimentacao = movimentos.get(position);
+                movimentoRef.child(movimentacao.getKey()).removeValue();
+                movimentoAdapter.notifyItemRemoved(position);
+
+            }
+        });
+
+        builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(PrincipalActivity.this, "Exclusao cancelada", Toast.LENGTH_SHORT).show();
+                movimentoAdapter.notifyDataSetChanged();
+            }
+        });
+
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
 
@@ -232,5 +269,34 @@ public class PrincipalActivity extends AppCompatActivity {
 
     public void adicionarReceita(View view){
         startActivity(new Intent(PrincipalActivity.this, NovaReceitaActivity.class));
+    }
+
+    public void swipe(){
+        ItemTouchHelper.Callback itemTouch = new ItemTouchHelper.Callback() {
+            @Override
+            public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+
+                int dragFlags = ItemTouchHelper.ACTION_STATE_IDLE;
+                int swipeFlasgs = ItemTouchHelper.START | ItemTouchHelper.END;
+
+
+                return makeMovementFlags(dragFlags, swipeFlasgs);
+            }
+
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                excluirMovimento(viewHolder);
+
+
+
+            }
+        };
+
+        new ItemTouchHelper(itemTouch).attachToRecyclerView(recyclerView);
     }
 }
