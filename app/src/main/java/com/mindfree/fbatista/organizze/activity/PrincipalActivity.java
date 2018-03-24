@@ -25,7 +25,9 @@ import com.mindfree.fbatista.organizze.R;
 import com.mindfree.fbatista.organizze.helper.Base64Custom;
 import com.mindfree.fbatista.organizze.model.Movimentacao;
 import com.mindfree.fbatista.organizze.model.Usuario;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+import com.prolificinteractive.materialcalendarview.OnMonthChangedListener;
 
 import org.w3c.dom.Text;
 
@@ -35,6 +37,7 @@ import java.util.List;
 
 public class PrincipalActivity extends AppCompatActivity {
 
+    //Layout
     private MaterialCalendarView calendarView;
     private TextView mNome;
     private TextView mSaldo;
@@ -42,11 +45,17 @@ public class PrincipalActivity extends AppCompatActivity {
     private Double despesaTotal;
     private Double receitaTotal;
     private RecyclerView recyclerView;
+    private MovimentoAdapter movimentoAdapter;
 
+    //Firebase
     private FirebaseAuth auth = ConfiguracaoFirebase.getAuth();
     private DatabaseReference firebaseRef = ConfiguracaoFirebase.getFirebaseDatabase();
     private DatabaseReference usuarioRef;
     private ValueEventListener valueEventListenerUsuario;
+    private DatabaseReference movimentoRef;
+    private ValueEventListener valueEventListenerMovimento;
+    private String mesAnoSelecionado;
+    private List<Movimentacao> movimentos = new ArrayList<>();
 
 
     @Override
@@ -67,8 +76,7 @@ public class PrincipalActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
 
         //Configura adapter
-        List<Movimentacao> movimentos = new ArrayList<>();
-        MovimentoAdapter movimentoAdapter = new MovimentoAdapter(this, movimentos);
+        movimentoAdapter = new MovimentoAdapter(this, movimentos);
         recyclerView.setAdapter(movimentoAdapter);
 
         configurarCalendario();
@@ -85,23 +93,18 @@ public class PrincipalActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         recuperarResumo();
-        Log.i("msg", "Listener foi adicionado");
+        recuperarMovimentos();
+        configurarCalendario();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         usuarioRef.removeEventListener(valueEventListenerUsuario);
-        Log.i("msg", "Listener foi removido");
+        movimentoRef.removeEventListener(valueEventListenerMovimento);
     }
 
-    public void adicionarDespesa(View view){
-        startActivity(new Intent(PrincipalActivity.this, NovaDespesactivity.class));
-    }
 
-    public void adicionarReceita(View view){
-        startActivity(new Intent(PrincipalActivity.this, NovaReceitaActivity.class));
-    }
 
     public void configurarCalendario(){
         //Este metodo faz com que o calendario exiba os meses e os dias em portugues
@@ -111,6 +114,25 @@ public class PrincipalActivity extends AppCompatActivity {
 
         calendarView.setTitleMonths(meses);
 
+        //Recuperando o mes e ano selecionado no calendario
+        CalendarDay data = calendarView.getCurrentDate();
+        //Formata o mes para que sempre tenha dois digitos
+        String mesSelecionado = String.format("%02d", (data.getMonth() + 1));
+        mesAnoSelecionado = String.valueOf( mesSelecionado + "" + data.getYear());
+
+        calendarView.setOnMonthChangedListener(new OnMonthChangedListener() {
+            @Override
+            public void onMonthChanged(MaterialCalendarView widget, CalendarDay date) {
+                //Formata o mes para que sempre tenha dois digitos
+                String mesSelecionado = String.format("%02d", (date.getMonth() + 1));
+                mesAnoSelecionado = String.valueOf(mesSelecionado + "" + date.getYear());
+                //Removendo um listener caso ja existente antes de criar um novo, para que nao fique duplicado
+                movimentoRef.removeEventListener(valueEventListenerMovimento);
+                recuperarMovimentos();
+
+            }
+        });
+
     }
 
     public void recuperarResumo(){
@@ -118,7 +140,7 @@ public class PrincipalActivity extends AppCompatActivity {
         String idUsuario = Base64Custom.codificarBase64(emailUsuario);
 
         usuarioRef = firebaseRef.child("usuarios")
-                .child(idUsuario);
+                                .child(idUsuario);
 
         valueEventListenerUsuario =  usuarioRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -144,6 +166,44 @@ public class PrincipalActivity extends AppCompatActivity {
 
     }
 
+    public void recuperarMovimentos(){
+
+        String emailUsuario = auth.getCurrentUser().getEmail();
+        String idUsuario = Base64Custom.codificarBase64(emailUsuario);
+
+
+
+        //Buscando as movimentacoes
+        movimentoRef = firebaseRef.child("movimentacao")
+                                  .child(idUsuario)
+                                  .child(mesAnoSelecionado);
+
+        //Limpando os dados ja existentes na lista de movimentacoes caso tenha
+        movimentos.clear();
+        movimentoAdapter.notifyDataSetChanged();
+
+        //Recuperando as movimentacoes
+        valueEventListenerMovimento = movimentoRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot item : dataSnapshot.getChildren()){
+                    Movimentacao movimentacao = item.getValue(Movimentacao.class);
+                    movimentos.add(movimentacao);
+                    movimentoAdapter.notifyDataSetChanged();
+                }
+
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+    }
+
 
 
     @Override
@@ -164,5 +224,13 @@ public class PrincipalActivity extends AppCompatActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void adicionarDespesa(View view){
+        startActivity(new Intent(PrincipalActivity.this, NovaDespesactivity.class));
+    }
+
+    public void adicionarReceita(View view){
+        startActivity(new Intent(PrincipalActivity.this, NovaReceitaActivity.class));
     }
 }

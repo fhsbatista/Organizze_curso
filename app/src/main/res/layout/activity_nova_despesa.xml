@@ -69,7 +69,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textInputLayout5">
 
             <android.support.design.widget.TextInputEditText
-                android:id="@+id/et_categoria"
+                android:id="@+id/et_descricao"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Ex: Presentes" />
@@ -87,10 +87,10 @@
             app:layout_constraintTop_toBottomOf="@+id/textInputLayout4">
 
             <android.support.design.widget.TextInputEditText
-                android:id="@+id/et_descricao"
+                android:id="@+id/et_categoria"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Presente para o Pedro" />
+                android:hint="Ex: Presente para o Pedro" />
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.FloatingActionButton

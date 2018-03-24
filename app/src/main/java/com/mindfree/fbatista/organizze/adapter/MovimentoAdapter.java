@@ -21,7 +21,7 @@ public class MovimentoAdapter extends RecyclerView.Adapter<MovimentoAdapter.MyVi
     private Context context;
     private List<Movimentacao> movimentos;
 
-    public MovimentoAdapter(Context contexy, List<Movimentacao> movimentos){
+    public MovimentoAdapter(Context context, List<Movimentacao> movimentos){
         this.context = context;
         this.movimentos = movimentos;
     };
@@ -49,6 +49,7 @@ public class MovimentoAdapter extends RecyclerView.Adapter<MovimentoAdapter.MyVi
             holder.mValor.setTextColor(context.getResources().getColor(android.R.color.holo_red_light));
             holder.mValor.setText("- " + movimentacao.getValor().toString());
         } else{
+            holder.mValor.setTextColor(context.getResources().getColor(android.R.color.holo_green_light));
             holder.mValor.setText(movimentacao.getValor().toString());
 
         }
@@ -69,9 +70,9 @@ public class MovimentoAdapter extends RecyclerView.Adapter<MovimentoAdapter.MyVi
         public MyViewHolder(View itemView) {
             super(itemView);
 
-            mDescricao = itemView.findViewById(R.id.tv_categoria);
-            mCategoria = itemView.findViewById(R.id.tv_categoria);
-            mValor = itemView.findViewById(R.id.tv_valor);
+            mDescricao = itemView.findViewById(R.id.tv_descricao_principal);
+            mCategoria = itemView.findViewById(R.id.tv_categoria_principal);
+            mValor = itemView.findViewById(R.id.tv_valor_principal);
         }
 
 

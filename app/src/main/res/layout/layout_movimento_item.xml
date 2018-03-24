@@ -11,17 +11,17 @@
     android:layout_height="wrap_content">
 
     <TextView
-        android:id="@+id/tv_categoria"
+        android:id="@+id/tv_categoria_principal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="Aqui vai a descricao"
         android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="@+id/tv_descricao"
-        app:layout_constraintTop_toBottomOf="@+id/tv_descricao" />
+        app:layout_constraintStart_toStartOf="@+id/tv_descricao_principal"
+        app:layout_constraintTop_toBottomOf="@+id/tv_descricao_principal" />
 
     <TextView
-        android:id="@+id/tv_descricao"
+        android:id="@+id/tv_descricao_principal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -33,7 +33,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tv_valor"
+        android:id="@+id/tv_valor_principal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -41,7 +41,7 @@
         android:textColor="@android:color/holo_green_light"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintBaseline_toBaselineOf="@+id/tv_descricao"
+        app:layout_constraintBaseline_toBaselineOf="@+id/tv_descricao_principal"
         app:layout_constraintEnd_toEndOf="parent" />
 
 
