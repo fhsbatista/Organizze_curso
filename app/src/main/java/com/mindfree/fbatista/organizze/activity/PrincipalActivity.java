@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -17,15 +19,19 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.mindfree.fbatista.organizze.adapter.MovimentoAdapter;
 import com.mindfree.fbatista.organizze.config.ConfiguracaoFirebase;
 import com.mindfree.fbatista.organizze.R;
 import com.mindfree.fbatista.organizze.helper.Base64Custom;
+import com.mindfree.fbatista.organizze.model.Movimentacao;
 import com.mindfree.fbatista.organizze.model.Usuario;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 
 import org.w3c.dom.Text;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PrincipalActivity extends AppCompatActivity {
 
@@ -35,6 +41,7 @@ public class PrincipalActivity extends AppCompatActivity {
     private Double resumoDiario;
     private Double despesaTotal;
     private Double receitaTotal;
+    private RecyclerView recyclerView;
 
     private FirebaseAuth auth = ConfiguracaoFirebase.getAuth();
     private DatabaseReference firebaseRef = ConfiguracaoFirebase.getFirebaseDatabase();
@@ -53,6 +60,16 @@ public class PrincipalActivity extends AppCompatActivity {
         calendarView = findViewById(R.id.calendarView);
         mNome = findViewById(R.id.tv_nome);
         mSaldo = findViewById(R.id.tv_saldo);
+        recyclerView = findViewById(R.id.recyclerView);
+        //Configura layout manager
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setHasFixedSize(true);
+
+        //Configura adapter
+        List<Movimentacao> movimentos = new ArrayList<>();
+        MovimentoAdapter movimentoAdapter = new MovimentoAdapter(this, movimentos);
+        recyclerView.setAdapter(movimentoAdapter);
 
         configurarCalendario();
 
