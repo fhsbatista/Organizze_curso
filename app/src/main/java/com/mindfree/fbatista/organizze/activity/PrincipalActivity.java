@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,15 +29,18 @@ import java.text.DecimalFormat;
 
 public class PrincipalActivity extends AppCompatActivity {
 
-    private Button sair;
-    private FirebaseAuth auth = ConfiguracaoFirebase.getAuth();
-    private DatabaseReference firebaseRef = ConfiguracaoFirebase.getFirebaseDatabase();
     private MaterialCalendarView calendarView;
     private TextView mNome;
     private TextView mSaldo;
     private Double resumoDiario;
     private Double despesaTotal;
     private Double receitaTotal;
+
+    private FirebaseAuth auth = ConfiguracaoFirebase.getAuth();
+    private DatabaseReference firebaseRef = ConfiguracaoFirebase.getFirebaseDatabase();
+    private DatabaseReference usuarioRef;
+    private ValueEventListener valueEventListenerUsuario;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,14 +55,27 @@ public class PrincipalActivity extends AppCompatActivity {
         mSaldo = findViewById(R.id.tv_saldo);
 
         configurarCalendario();
+
+
+
+
+
+
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
         recuperarResumo();
+        Log.i("msg", "Listener foi adicionado");
+    }
 
-
-
-
-
-
-
+    @Override
+    protected void onStop() {
+        super.onStop();
+        usuarioRef.removeEventListener(valueEventListenerUsuario);
+        Log.i("msg", "Listener foi removido");
     }
 
     public void adicionarDespesa(View view){
@@ -83,10 +100,10 @@ public class PrincipalActivity extends AppCompatActivity {
         String emailUsuario = auth.getCurrentUser().getEmail();
         String idUsuario = Base64Custom.codificarBase64(emailUsuario);
 
-        DatabaseReference usuarioRef = firebaseRef.child("usuarios")
+        usuarioRef = firebaseRef.child("usuarios")
                 .child(idUsuario);
 
-        usuarioRef.addValueEventListener(new ValueEventListener() {
+        valueEventListenerUsuario =  usuarioRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Usuario usuario = dataSnapshot.getValue(Usuario.class);
@@ -109,6 +126,8 @@ public class PrincipalActivity extends AppCompatActivity {
         });
 
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
